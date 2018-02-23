@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <p>msit117</p>
+    <input id="Button1" type="button" value="查詢" onclick="getCategory()" />
+    <input id="Button11" type="button" value="查詢byID" onclick="getCategoryByID()" />
+    <input id="Button2" type="button" value="新增" onclick="postCategory()" />
+    <input id="Button3" type="button" value="修改" onclick="putCategory()" />
+    <input id="Button4" type="button" value="刪除" onclick="deleteCategory()" />
+    <div id="CategoryTable"></div>
+    <script src="Scripts/jquery-3.3.1.js"></script>
+    <script>
+        function getCategory() {
+            var show = "";
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:60655/api/Categories"
+            }).done(function (result) {
+                $.each(result, function (index, record) {
+                    show += record.CategoryID + ", " + record.CategoryName + ", " + record.Description + " <br>";
+                })
+                $("#CategoryTable").html(show);
+            }).fail(function (err) {
+                alert(err.responseText);
+            });
+        };
+        function getCategoryByID() {
+            var show = "";
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:60655/api/Categories/1"
+            }).done(function (result) {
+                show += result.CategoryID + ", "+result.CategoryName + ", "+result.Description;
+                $("#CategoryTable").text(show);
+            }).fail(function (err) {
+                alert(err.responseText);
+            });
+        };
+        function putCategory() {
+            datas = {
+                CategoryID:12,
+                CategoryName: "xxxx",
+                Description: "student"
+            }
+            $.ajax({
+                type: "PUT",
+                url: "http://localhost:60655/api/Categories/12",
+                data: datas
+            }).done(function (result) {
+                $("#CategoryTable").text(result);
+            }).fail(function (err) {
+                alert(err.responseText);
+            });
+        };
+        //新增
+        function postCategory() {
+            datas ={
+                CategoryName:"xxxx",
+                Description:"student"
+            }
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:60655/api/Categories",
+                data:datas
+            }).done(function (result) {
+                $("#CategoryTable").text(result);
+            }).fail(function (err) {
+                alert(err.responseText);
+            });
+        };
+        //刪除
+        function deleteCategory() {
+            $.ajax({
+                type: "DELETE",
+                url: "http://localhost:60655/api/Categories/1013",
+            }).done(function (result) {
+                $("#CategoryTable").text(result);
+            }).fail(function (err) {
+                alert(err.responseText);
+            });
+        };
+    </script>
+</body>
+</html>
